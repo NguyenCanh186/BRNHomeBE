@@ -1,7 +1,7 @@
-package com.example.blogbe.service;
+package com.example.blogbe.service.userAuth;
 
-import com.example.blogbe.model.User;
-import com.example.blogbe.model.UserPrinciple;
+import com.example.blogbe.model.userAuth.User;
+import com.example.blogbe.model.userAuth.UserPrinciple;
 import com.example.blogbe.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

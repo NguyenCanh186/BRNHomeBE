@@ -4,8 +4,8 @@ package com.example.blogbe.config;
 import com.example.blogbe.config.custom.CustomAccessDeniedHandler;
 import com.example.blogbe.config.custom.JwtAuthenticationFilter;
 import com.example.blogbe.config.custom.RestAuthenticationEntryPoint;
-import com.example.blogbe.service.AppUserService;
-import com.example.blogbe.service.IAppUserService;
+import com.example.blogbe.service.userAuth.AppUserService;
+import com.example.blogbe.service.userAuth.IAppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +21,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -77,8 +79,7 @@ public class AppConfig extends WebSecurityConfigurerAdapter {
         http.csrf().ignoringAntMatchers("/**");
         http.httpBasic().authenticationEntryPoint(restAuthenticationEntryPoint());
         http.authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .and().authorizeRequests().antMatchers("/api/**").permitAll()
+                .antMatchers("/login", "/get-data/**").permitAll().anyRequest().authenticated()
                 .and().csrf().disable();
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)

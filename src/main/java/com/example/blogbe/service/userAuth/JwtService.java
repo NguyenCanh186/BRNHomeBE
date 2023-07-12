@@ -1,7 +1,7 @@
-package com.example.blogbe.service;
+package com.example.blogbe.service.userAuth;
 
 
-import com.example.blogbe.model.UserPrinciple;
+import com.example.blogbe.model.userAuth.UserPrinciple;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

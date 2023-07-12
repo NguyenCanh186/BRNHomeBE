@@ -1,8 +1,8 @@
 package com.example.blogbe.config.custom;
 
 
-import com.example.blogbe.service.AppUserService;
-import com.example.blogbe.service.JwtService;
+import com.example.blogbe.service.userAuth.AppUserService;
+import com.example.blogbe.service.userAuth.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,4 +1,4 @@
-package com.example.blogbe.model;
+package com.example.blogbe.model.userAuth;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

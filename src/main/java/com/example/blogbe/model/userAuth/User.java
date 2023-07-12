@@ -1,4 +1,4 @@
-package com.example.blogbe.model;
+package com.example.blogbe.model.userAuth;
 
 import lombok.Data;
 
