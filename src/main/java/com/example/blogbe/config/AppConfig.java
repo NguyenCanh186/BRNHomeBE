@@ -79,7 +79,7 @@ public class AppConfig extends WebSecurityConfigurerAdapter {
         http.csrf().ignoringAntMatchers("/**");
         http.httpBasic().authenticationEntryPoint(restAuthenticationEntryPoint());
         http.authorizeRequests()
-                .antMatchers("/login", "/get-data/**").permitAll().anyRequest().authenticated()
+                .antMatchers("/login", "/get-data/**", "/image/**").permitAll().anyRequest().authenticated()
                 .and().csrf().disable();
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)

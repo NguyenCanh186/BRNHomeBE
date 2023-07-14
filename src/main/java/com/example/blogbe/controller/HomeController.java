@@ -45,16 +45,22 @@ public class HomeController {
     private ResponseEntity<?> updateHome(@ModelAttribute HomeForm homeForm) {
         Home home = homeService.findAll().get(0);
         MultipartFile multipartFile = homeForm.getImage();
-        String fileName = multipartFile.getOriginalFilename();
-        try {
-            FileCopyUtils.copy(homeForm.getImage().getBytes(), new File(this.fileUpload + fileName));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (multipartFile != null) {
+            String fileName = multipartFile.getOriginalFilename();
+            try {
+                FileCopyUtils.copy(homeForm.getImage().getBytes(), new File(this.fileUpload + fileName));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            home.setImage(fileName);
+            home.setTitle(homeForm.getTitle());
+            home.setDescription(homeForm.getDescription());
+            homeService.save(home);
+        } else {
+            home.setTitle(homeForm.getTitle());
+            home.setDescription(homeForm.getDescription());
+            homeService.save(home);
         }
-        home.setImage(fileName);
-        home.setTitle(homeForm.getTitle());
-        home.setDescription(homeForm.getDescription());
-        homeService.save(home);
         return ResponseEntity.ok(home);
     }
 
