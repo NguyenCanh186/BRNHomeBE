@@ -1,23 +1,23 @@
-package com.example.blogbe.model.blog.picture;
+package com.example.blogbe.model.story.picture;
 
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
-public class BlogPictureForm {
+public class StoryPictureForm {
     private Long id;
     private MultipartFile image;
     private String title;
 
-    public BlogPictureForm(MultipartFile image, String title) {
+    public StoryPictureForm(MultipartFile image, String title) {
         this.image = image;
         this.title = title;
     }
 
-    public BlogPictureForm() {
+    public StoryPictureForm() {
     }
 
-    public BlogPictureForm(Long id, MultipartFile image, String title) {
+    public StoryPictureForm(Long id, MultipartFile image, String title) {
         this.id = id;
         this.image = image;
         this.title = title;
