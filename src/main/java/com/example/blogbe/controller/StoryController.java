@@ -62,6 +62,59 @@ public class StoryController {
         }
         return ResponseEntity.ok(stotyDTOS);
     }
+    
+    @PostMapping("/update")
+    private ResponseEntity<?> update(@ModelAttribute StoryReq storyReq) throws IOException {
+        if (storyReq.getListIdPicture() != null) {
+            // remove picture
+            String[] listIdPicture = storyReq.getListIdPicture().substring(0, storyReq.getListIdPicture().length() - 1).split(",");
+            Long[] numbers = new Long[listIdPicture.length];
+            for (int i = 0; i < listIdPicture.length; i++) {
+                numbers[i] = Long.parseLong(listIdPicture[i]);
+            }
+            for (Long id : numbers) {
+                storyPictureService.remove(id);
+            }
+        }
+        Optional<Story> story = storyService.findById(storyReq.getId());
+        story.get().setName(storyReq.getName());
+        story.get().setTitle(storyReq.getTitle());
+        storyService.save(story.get());
+        StoryPicture storyPicture = new StoryPicture();
+        if (storyReq.getPictureId() != null) {
+            Optional<StoryPicture> storyPicture1 = storyPictureService.findById(storyReq.getPictureId());
+            if (storyReq.getImage() != null) {
+                MultipartFile multipartFile = storyReq.getImage();
+                String fileName = multipartFile.getOriginalFilename();
+                try {
+                    FileCopyUtils.copy(storyReq.getImage().getBytes(), new File(this.fileUpload + fileName));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                storyPicture1.get().setTitle(storyReq.getTitleImage());
+                storyPicture1.get().setImage(fileName);
+                storyPicture1.get().setStory(story.get());
+                storyPictureService.save(storyPicture1.get());
+            } else {
+                storyPicture1.get().setTitle(storyReq.getTitleImage());
+                storyPicture1.get().setStory(story.get());
+                storyPictureService.save(storyPicture1.get());
+            }
+        } else {
+            MultipartFile multipartFile = storyReq.getImage();
+            String fileName = multipartFile.getOriginalFilename();
+            try {
+                FileCopyUtils.copy(storyReq.getImage().getBytes(), new File(this.fileUpload + fileName));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            storyPicture.setTitle(storyReq.getTitleImage());
+            storyPicture.setImage(fileName);
+            storyPicture.setStory(story.get());
+            storyPictureService.save(storyPicture);
+        }
+        return null;
+    }
 
     @PostMapping
     public ResponseEntity<?> create(@ModelAttribute StoryReq storyReq) throws IOException {

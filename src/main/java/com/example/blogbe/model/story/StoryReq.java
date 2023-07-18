@@ -3,6 +3,8 @@ package com.example.blogbe.model.story;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 
 @Data
 public class StoryReq {
@@ -12,8 +14,12 @@ public class StoryReq {
 
     private String title;
 
+    private Long pictureId;
+
     private MultipartFile image;
     private String titleImage;
+
+    private String listIdPicture;
 
     public StoryReq() {
     }

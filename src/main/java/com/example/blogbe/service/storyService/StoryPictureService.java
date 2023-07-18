@@ -31,4 +31,8 @@ public class StoryPictureService implements IStoryPictureService{
     public void remove(Long id) {
         storyPictureRepo.deleteById(id);
     }
+
+    public List<StoryPicture> findAllByStoryId(Long id) {
+        return storyPictureRepo.findAllByStoryId(id);
+    }
 }

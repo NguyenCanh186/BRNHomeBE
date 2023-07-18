@@ -10,12 +10,11 @@ import com.example.blogbe.service.storyService.StoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/get-data")
@@ -61,5 +60,20 @@ public class GetDataController {
             }
         }
         return ResponseEntity.ok(stotyDTOS);
+    }
+
+    @GetMapping("/story/{id}")
+    public ResponseEntity<StotyDTO> getStoryById(@PathVariable Long id) {
+        Optional<Story> story = storyService.findById(id);
+        if (!story.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        StotyDTO stotyDTO = new StotyDTO();
+        stotyDTO.setId(id);
+        stotyDTO.setName(story.get().getName());
+        stotyDTO.setTitle(story.get().getTitle());
+        List<StoryPicture> storyPictureList = storyPictureService.findAllByStoryId(id);
+        stotyDTO.setStoryPictures(storyPictureList);
+        return ResponseEntity.ok(stotyDTO);
     }
 }
