@@ -153,4 +153,14 @@ public class StoryController {
         }
         return ResponseEntity.ok("Xong");
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteStory(@PathVariable Long id) {
+        List<StoryPicture> storyPictures = storyPictureService.findAllByStoryId(id);
+        for (int i = 0; i < storyPictures.size(); i++) {
+            storyPictureService.remove(storyPictures.get(i).getId());
+        }
+        storyService.remove(id);
+        return ResponseEntity.ok("Đã xóa");
+    }
 }
