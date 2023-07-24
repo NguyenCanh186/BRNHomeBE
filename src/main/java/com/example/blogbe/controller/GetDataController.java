@@ -4,6 +4,7 @@ import com.example.blogbe.model.home.Home;
 import com.example.blogbe.model.story.Story;
 import com.example.blogbe.model.story.StotyDTO;
 import com.example.blogbe.model.story.picture.StoryPicture;
+import com.example.blogbe.service.blogService.IBlogService;
 import com.example.blogbe.service.home.IHomeService;
 import com.example.blogbe.service.storyService.StoryPictureService;
 import com.example.blogbe.service.storyService.StoryService;
@@ -25,6 +26,9 @@ public class GetDataController {
 
     @Autowired
     private StoryService storyService;
+
+    @Autowired
+    private IBlogService blogService;
 
     @Autowired
     private StoryPictureService storyPictureService;
@@ -75,5 +79,15 @@ public class GetDataController {
         List<StoryPicture> storyPictureList = storyPictureService.findAllByStoryId(id);
         stotyDTO.setStoryPictures(storyPictureList);
         return ResponseEntity.ok(stotyDTO);
+    }
+
+    @GetMapping("/getBlog")
+    public ResponseEntity<?> getBlog(){
+        return ResponseEntity.ok(blogService.findAll());
+    }
+
+    @GetMapping("/getBlog/{id}")
+    public ResponseEntity<?> getBlogById(@PathVariable Long id){
+        return ResponseEntity.ok(blogService.findById(id).get());
     }
 }

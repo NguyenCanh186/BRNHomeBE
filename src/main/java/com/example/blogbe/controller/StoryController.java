@@ -36,32 +36,6 @@ public class StoryController {
 
     @Value("${upload.path}")
     private String fileUpload;
-
-    @GetMapping
-    public ResponseEntity<List<StotyDTO>> getStory() {
-        List<StoryPicture> storyPictureList = storyPictureService.findAll();
-        List<Story> storyList = storyService.findAll();
-        List<StotyDTO> stotyDTOS = new ArrayList<>();
-        for (int i = 0; i < storyList.size(); i++) {
-            StotyDTO stotyDTO = new StotyDTO();
-            stotyDTO.setId(storyList.get(i).getId());
-            stotyDTO.setName(storyList.get(i).getName());
-            stotyDTO.setTitle(storyList.get(i).getTitle());
-            stotyDTOS.add(stotyDTO);
-            for (StoryPicture storyPicture : storyPictureList) {
-                if (storyPicture.getStory().getId() == stotyDTOS.get(i).getId()) {
-                    if (stotyDTOS.get(i).getStoryPictures() == null) {
-                        List<StoryPicture> list = new ArrayList<>();
-                        stotyDTOS.get(i).setStoryPictures(list);
-                        stotyDTOS.get(i).getStoryPictures().add(storyPicture);
-                    } else {
-                        stotyDTOS.get(i).getStoryPictures().add(storyPicture);
-                    }
-                }
-            }
-        }
-        return ResponseEntity.ok(stotyDTOS);
-    }
     
     @PostMapping("/update")
     private ResponseEntity<?> update(@ModelAttribute StoryReq storyReq) throws IOException {
