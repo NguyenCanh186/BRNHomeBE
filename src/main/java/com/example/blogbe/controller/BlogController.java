@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/blog")
@@ -26,6 +27,12 @@ public class BlogController {
 
     @PostMapping
     public ResponseEntity<?> createBlog(@ModelAttribute BlogForm blogForm){
+        List<Blog> blogs = blogRepo.findAll();
+        for (Blog blog : blogs) {
+            if (blog.getTitle().equals(blogForm.getTitle())) {
+                return ResponseEntity.ok("Exist");
+            }
+        }
         Blog blog = new Blog();
         MultipartFile multipartFile = blogForm.getFileImage();
         String fileName = multipartFile.getOriginalFilename();
@@ -37,7 +44,7 @@ public class BlogController {
         blog.setTitle(blogForm.getTitle());
         blog.setContent(blogForm.getContent());
         blog.setImage(fileName);
-        return ResponseEntity.ok(blogRepo.save(blog));
+        return ResponseEntity.ok("Done");
     }
 
     @PostMapping("/update")

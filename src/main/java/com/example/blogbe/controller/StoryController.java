@@ -1,19 +1,12 @@
 package com.example.blogbe.controller;
 
 import com.example.blogbe.model.story.Story;
-import com.example.blogbe.model.story.StoryListWrapper;
 import com.example.blogbe.model.story.StoryReq;
-import com.example.blogbe.model.story.StotyDTO;
 import com.example.blogbe.model.story.picture.StoryPicture;
-import com.example.blogbe.model.story.picture.StoryPictureForm;
 import com.example.blogbe.service.storyService.StoryPictureService;
 import com.example.blogbe.service.storyService.StoryService;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
@@ -40,7 +33,6 @@ public class StoryController {
     @PostMapping("/update")
     private ResponseEntity<?> update(@ModelAttribute StoryReq storyReq) throws IOException {
         if (storyReq.getListIdPicture() != null) {
-            // remove picture
             String[] listIdPicture = storyReq.getListIdPicture().substring(0, storyReq.getListIdPicture().length() - 1).split(",");
             Long[] numbers = new Long[listIdPicture.length];
             for (int i = 0; i < listIdPicture.length; i++) {
