@@ -44,6 +44,7 @@ public class BlogController {
         blog.setTitle(blogForm.getTitle());
         blog.setContent(blogForm.getContent());
         blog.setImage(fileName);
+        blogRepo.save(blog);
         return ResponseEntity.ok("Done");
     }
 
