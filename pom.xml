@@ -117,13 +117,17 @@
         </dependency>
     </dependencies>
     <build>
+        <finalName>blogBE</finalName>
         <plugins>
             <plugin>
+                <!-- Cập nhật phiên bản Spring Boot Maven Plugin với phiên bản parent -->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${project.parent.version}</version>
+                <!-- Cập nhật phiên bản plugin với phiên bản parent -->
+                <version>2.7.4</version>
                 <configuration>
                     <excludes>
+                        <!-- Loại trừ Lombok khỏi file JAR được tạo ra -->
                         <exclude>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
@@ -134,9 +138,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version> <!-- Cập nhật phiên bản Maven Compiler Plugin -->
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
         </plugins>
