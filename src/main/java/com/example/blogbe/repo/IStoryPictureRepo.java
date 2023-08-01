@@ -1,6 +1,6 @@
 package com.example.blogbe.repo;
 
-import com.example.blogbe.model.story.picture.StoryPicture;
+import com.example.blogbe.model.news.picture.NewsPicture;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IStoryPictureRepo extends JpaRepository<StoryPicture, Long> {
+public interface IStoryPictureRepo extends JpaRepository<NewsPicture, Long> {
     @Query(nativeQuery = true, value = "select * from story_picture where story_id  = ?;")
-    List<StoryPicture> findAllByStoryId(Long id);
+    List<NewsPicture> findAllByStoryId(Long id);
 }

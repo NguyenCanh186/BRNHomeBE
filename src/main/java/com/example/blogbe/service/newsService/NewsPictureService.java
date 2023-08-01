@@ -1,31 +1,30 @@
-package com.example.blogbe.service.storyService;
+package com.example.blogbe.service.newsService;
 
-import com.example.blogbe.model.story.picture.StoryPicture;
+import com.example.blogbe.model.news.picture.NewsPicture;
 import com.example.blogbe.repo.IStoryPictureRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class StoryPictureService implements IStoryPictureService{
+public class NewsPictureService implements INewsPictureService {
     @Autowired
     private IStoryPictureRepo storyPictureRepo;
     @Override
-    public List<StoryPicture> findAll() {
+    public List<NewsPicture> findAll() {
         return storyPictureRepo.findAll();
     }
 
     @Override
-    public Optional<StoryPicture> findById(Long id) {
+    public Optional<NewsPicture> findById(Long id) {
         return storyPictureRepo.findById(id);
     }
 
     @Override
-    public StoryPicture save(StoryPicture storyPicture) {
-        return storyPictureRepo.save(storyPicture);
+    public NewsPicture save(NewsPicture newsPicture) {
+        return storyPictureRepo.save(newsPicture);
     }
 
     @Override
@@ -33,7 +32,7 @@ public class StoryPictureService implements IStoryPictureService{
         storyPictureRepo.deleteById(id);
     }
 
-    public List<StoryPicture> findAllByStoryId(Long id) {
+    public List<NewsPicture> findAllByStoryId(Long id) {
         return storyPictureRepo.findAllByStoryId(id);
     }
 }

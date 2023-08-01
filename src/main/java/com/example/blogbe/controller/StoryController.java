@@ -1,10 +1,10 @@
 package com.example.blogbe.controller;
 
-import com.example.blogbe.model.story.Story;
-import com.example.blogbe.model.story.StoryReq;
-import com.example.blogbe.model.story.picture.StoryPicture;
-import com.example.blogbe.service.storyService.StoryPictureService;
-import com.example.blogbe.service.storyService.StoryService;
+import com.example.blogbe.model.news.News;
+import com.example.blogbe.model.news.NewsReq;
+import com.example.blogbe.model.news.picture.NewsPicture;
+import com.example.blogbe.service.newsService.NewsPictureService;
+import com.example.blogbe.service.newsService.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -22,109 +22,109 @@ import java.util.*;
 @RequestMapping("/story")
 public class StoryController {
     @Autowired
-    private StoryService storyService;
+    private NewsService storyService;
 
     @Autowired
-    private StoryPictureService storyPictureService;
+    private NewsPictureService storyPictureService;
 
     @Value("${upload.path}")
     private String fileUpload;
     
-    @PostMapping("/update")
-    private ResponseEntity<?> update(@ModelAttribute StoryReq storyReq) throws IOException {
-        if (storyReq.getListIdPicture() != null) {
-            String[] listIdPicture = storyReq.getListIdPicture().substring(0, storyReq.getListIdPicture().length() - 1).split(",");
-            Long[] numbers = new Long[listIdPicture.length];
-            for (int i = 0; i < listIdPicture.length; i++) {
-                numbers[i] = Long.parseLong(listIdPicture[i]);
-            }
-            for (Long id : numbers) {
-                storyPictureService.remove(id);
-            }
-        }
-        Optional<Story> story = storyService.findById(storyReq.getId());
-        story.get().setName(storyReq.getName());
-        story.get().setTitle(storyReq.getTitle());
-        storyService.save(story.get());
-        StoryPicture storyPicture = new StoryPicture();
-        if (storyReq.getPictureId() != null) {
-            Optional<StoryPicture> storyPicture1 = storyPictureService.findById(storyReq.getPictureId());
-            if (storyReq.getImage() != null) {
-                MultipartFile multipartFile = storyReq.getImage();
-                String fileName = multipartFile.getOriginalFilename();
-                try {
-                    FileCopyUtils.copy(storyReq.getImage().getBytes(), new File(this.fileUpload + fileName));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                storyPicture1.get().setTitle(storyReq.getTitleImage());
-                storyPicture1.get().setImage(fileName);
-                storyPicture1.get().setStory(story.get());
-                storyPictureService.save(storyPicture1.get());
-            } else {
-                storyPicture1.get().setTitle(storyReq.getTitleImage());
-                storyPicture1.get().setStory(story.get());
-                storyPictureService.save(storyPicture1.get());
-            }
-        } else {
-            MultipartFile multipartFile = storyReq.getImage();
-            String fileName = multipartFile.getOriginalFilename();
-            try {
-                FileCopyUtils.copy(storyReq.getImage().getBytes(), new File(this.fileUpload + fileName));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            storyPicture.setTitle(storyReq.getTitleImage());
-            storyPicture.setImage(fileName);
-            storyPicture.setStory(story.get());
-            storyPictureService.save(storyPicture);
-        }
-        return null;
-    }
-
-    @PostMapping
-    public ResponseEntity<?> create(@ModelAttribute StoryReq storyReq) throws IOException {
-        Story storyCheck = storyService.findByName(storyReq.getName());
-        if (storyCheck != null) {
-            StoryPicture storyPicture = new StoryPicture();
-            MultipartFile multipartFile = storyReq.getImage();
-            String fileName = multipartFile.getOriginalFilename();
-            try {
-                FileCopyUtils.copy(storyReq.getImage().getBytes(), new File(this.fileUpload + fileName));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            storyPicture.setTitle(storyReq.getTitleImage());
-            storyPicture.setImage(fileName);
-            storyPicture.setStory(storyCheck);
-            storyPictureService.save(storyPicture);
-        } else {
-            Story story = new Story();
-            story.setName(storyReq.getName());
-            story.setTitle(storyReq.getTitle());
-            storyService.save(story);
-            Story storyCallBack = storyService.findByName(storyReq.getName());
-            StoryPicture storyPicture = new StoryPicture();
-            MultipartFile multipartFile = storyReq.getImage();
-            String fileName = multipartFile.getOriginalFilename();
-            try {
-                FileCopyUtils.copy(storyReq.getImage().getBytes(), new File(this.fileUpload + fileName));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            storyPicture.setTitle(storyReq.getTitleImage());
-            storyPicture.setImage(fileName);
-            storyPicture.setStory(storyCallBack);
-            storyPictureService.save(storyPicture);
-        }
-        return ResponseEntity.ok("Xong");
-    }
+//    @PostMapping("/update")
+//    private ResponseEntity<?> update(@ModelAttribute NewsReq newsReq) throws IOException {
+//        if (newsReq.getListIdPicture() != null) {
+//            String[] listIdPicture = newsReq.getListIdPicture().substring(0, newsReq.getListIdPicture().length() - 1).split(",");
+//            Long[] numbers = new Long[listIdPicture.length];
+//            for (int i = 0; i < listIdPicture.length; i++) {
+//                numbers[i] = Long.parseLong(listIdPicture[i]);
+//            }
+//            for (Long id : numbers) {
+//                storyPictureService.remove(id);
+//            }
+//        }
+//        Optional<News> story = storyService.findById(newsReq.getId());
+//        story.get().setName(newsReq.getName());
+//        story.get().setTitle(newsReq.getTitle());
+//        storyService.save(story.get());
+//        NewsPicture newsPicture = new NewsPicture();
+//        if (newsReq.getPictureId() != null) {
+//            Optional<NewsPicture> storyPicture1 = storyPictureService.findById(newsReq.getPictureId());
+//            if (newsReq.getImage() != null) {
+//                MultipartFile multipartFile = newsReq.getImage();
+//                String fileName = multipartFile.getOriginalFilename();
+//                try {
+//                    FileCopyUtils.copy(newsReq.getImage().getBytes(), new File(this.fileUpload + fileName));
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                storyPicture1.get().setTitle(newsReq.getTitleImage());
+//                storyPicture1.get().setImage(fileName);
+//                storyPicture1.get().setNews(story.get());
+//                storyPictureService.save(storyPicture1.get());
+//            } else {
+//                storyPicture1.get().setTitle(newsReq.getTitleImage());
+//                storyPicture1.get().setNews(story.get());
+//                storyPictureService.save(storyPicture1.get());
+//            }
+//        } else {
+//            MultipartFile multipartFile = newsReq.getImage();
+//            String fileName = multipartFile.getOriginalFilename();
+//            try {
+//                FileCopyUtils.copy(newsReq.getImage().getBytes(), new File(this.fileUpload + fileName));
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//            newsPicture.setTitle(newsReq.getTitleImage());
+//            newsPicture.setImage(fileName);
+//            newsPicture.setNews(story.get());
+//            storyPictureService.save(newsPicture);
+//        }
+//        return null;
+//    }
+//
+//    @PostMapping
+//    public ResponseEntity<?> create(@ModelAttribute NewsReq newsReq) throws IOException {
+//        News newsCheck = storyService.findByName(newsReq.getName());
+//        if (newsCheck != null) {
+//            NewsPicture newsPicture = new NewsPicture();
+//            MultipartFile multipartFile = newsReq.getImage();
+//            String fileName = multipartFile.getOriginalFilename();
+//            try {
+//                FileCopyUtils.copy(newsReq.getImage().getBytes(), new File(this.fileUpload + fileName));
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//            newsPicture.setTitle(newsReq.getTitleImage());
+//            newsPicture.setImage(fileName);
+//            newsPicture.setNews(newsCheck);
+//            storyPictureService.save(newsPicture);
+//        } else {
+//            News news = new News();
+//            news.setName(newsReq.getName());
+//            news.setTitle(newsReq.getTitle());
+//            storyService.save(news);
+//            News newsCallBack = storyService.findByName(newsReq.getName());
+//            NewsPicture newsPicture = new NewsPicture();
+//            MultipartFile multipartFile = newsReq.getImage();
+//            String fileName = multipartFile.getOriginalFilename();
+//            try {
+//                FileCopyUtils.copy(newsReq.getImage().getBytes(), new File(this.fileUpload + fileName));
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//            newsPicture.setTitle(newsReq.getTitleImage());
+//            newsPicture.setImage(fileName);
+//            newsPicture.setNews(newsCallBack);
+//            storyPictureService.save(newsPicture);
+//        }
+//        return ResponseEntity.ok("Xong");
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteStory(@PathVariable Long id) {
-        List<StoryPicture> storyPictures = storyPictureService.findAllByStoryId(id);
-        for (int i = 0; i < storyPictures.size(); i++) {
-            storyPictureService.remove(storyPictures.get(i).getId());
+        List<NewsPicture> newsPictures = storyPictureService.findAllByStoryId(id);
+        for (int i = 0; i < newsPictures.size(); i++) {
+            storyPictureService.remove(newsPictures.get(i).getId());
         }
         storyService.remove(id);
         return ResponseEntity.ok("Đã xóa");
