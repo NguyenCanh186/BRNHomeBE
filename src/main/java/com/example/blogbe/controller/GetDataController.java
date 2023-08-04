@@ -1,13 +1,10 @@
 package com.example.blogbe.controller;
 
-import com.example.blogbe.model.home.Home;
-import com.example.blogbe.model.story.Story;
-import com.example.blogbe.model.story.StotyDTO;
-import com.example.blogbe.model.story.picture.StoryPicture;
-import com.example.blogbe.service.blogService.IBlogService;
-import com.example.blogbe.service.home.IHomeService;
-import com.example.blogbe.service.storyService.StoryPictureService;
-import com.example.blogbe.service.storyService.StoryService;
+import com.example.blogbe.model.news.News;
+import com.example.blogbe.model.news.NewsDTO;
+import com.example.blogbe.model.news.picture.NewsPicture;
+import com.example.blogbe.service.newsService.NewsPictureService;
+import com.example.blogbe.service.newsService.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,73 +18,55 @@ import java.util.Optional;
 @RequestMapping("/get-data")
 @CrossOrigin("*")
 public class GetDataController {
-    @Autowired
-    private IHomeService homeService;
 
     @Autowired
-    private StoryService storyService;
+    private NewsService newsService;
 
     @Autowired
-    private IBlogService blogService;
+    private NewsPictureService newsPictureService;
 
-    @Autowired
-    private StoryPictureService storyPictureService;
-
-    @GetMapping("/profile")
-    public ResponseEntity<?> getProfile() {
-        List<Home> list = homeService.findAll();
-        Home home = list.get(0);
-        return ResponseEntity.ok(home);
-    }
-
-    @GetMapping("/story")
-    public ResponseEntity<List<StotyDTO>> getStory() {
-        List<StoryPicture> storyPictureList = storyPictureService.findAll();
-        List<Story> storyList = storyService.findAll();
-        List<StotyDTO> stotyDTOS = new ArrayList<>();
-        for (int i = 0; i < storyList.size(); i++) {
-            StotyDTO stotyDTO = new StotyDTO();
-            stotyDTO.setId(storyList.get(i).getId());
-            stotyDTO.setName(storyList.get(i).getName());
-            stotyDTO.setTitle(storyList.get(i).getTitle());
-            stotyDTOS.add(stotyDTO);
-            for (StoryPicture storyPicture : storyPictureList) {
-                if (storyPicture.getStory().getId() == stotyDTOS.get(i).getId()) {
-                    if (stotyDTOS.get(i).getStoryPictures() == null) {
-                        List<StoryPicture> list = new ArrayList<>();
-                        stotyDTOS.get(i).setStoryPictures(list);
-                        stotyDTOS.get(i).getStoryPictures().add(storyPicture);
+    @GetMapping("/news")
+    public ResponseEntity<List<NewsDTO>> getNews() {
+        List<NewsPicture> newsPictureList = newsPictureService.findAll();
+        List<News> newsList = newsService.findAll();
+        List<NewsDTO> newsDTOS = new ArrayList<>();
+        for (int i = 0; i < newsList.size(); i++) {
+            NewsDTO newsDTO = new NewsDTO();
+            newsDTO.setId(newsList.get(i).getId());
+            newsDTO.setCover(newsList.get(i).getCover());
+            newsDTO.setTitle(newsList.get(i).getTitle());
+            newsDTO.setDate(newsList.get(i).getDate());
+            newsDTO.setCategory(newsList.get(i).getCategory());
+            newsDTOS.add(newsDTO);
+            for (NewsPicture newsPicture : newsPictureList) {
+                if (newsPicture.getNews().getId() == newsDTOS.get(i).getId()) {
+                    if (newsDTOS.get(i).getNewsPictures() == null) {
+                        List<NewsPicture> list = new ArrayList<>();
+                        newsDTOS.get(i).setNewsPictures(list);
+                        newsDTOS.get(i).getNewsPictures().add(newsPicture);
                     } else {
-                        stotyDTOS.get(i).getStoryPictures().add(storyPicture);
+                        newsDTOS.get(i).getNewsPictures().add(newsPicture);
                     }
                 }
             }
         }
-        return ResponseEntity.ok(stotyDTOS);
+        return ResponseEntity.ok(newsDTOS);
     }
 
-    @GetMapping("/story/{id}")
-    public ResponseEntity<StotyDTO> getStoryById(@PathVariable Long id) {
-        Optional<Story> story = storyService.findById(id);
-        if (!story.isPresent()) {
+    @GetMapping("/news/{id}")
+    public ResponseEntity<NewsDTO> getNewsById(@PathVariable Long id) {
+        Optional<News> news = newsService.findById(id);
+        if (!news.isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        StotyDTO stotyDTO = new StotyDTO();
-        stotyDTO.setId(id);
-        stotyDTO.setName(story.get().getName());
-        stotyDTO.setTitle(story.get().getTitle());
-        List<StoryPicture> storyPictureList = storyPictureService.findAllByStoryId(id);
-        stotyDTO.setStoryPictures(storyPictureList);
-        return ResponseEntity.ok(stotyDTO);
-    }
-
-    @GetMapping("/getBlog")
-    public ResponseEntity<?> getBlog(){
-        return ResponseEntity.ok(blogService.findAll());
-    }
-
-    @GetMapping("/getBlog/{id}")
-    public ResponseEntity<?> getBlogById(@PathVariable Long id){
-        return ResponseEntity.ok(blogService.findById(id).get());
+        NewsDTO newsDTO = new NewsDTO();
+        newsDTO.setId(id);
+        newsDTO.setCover(news.get().getCover());
+        newsDTO.setTitle(news.get().getTitle());
+        newsDTO.setDate(news.get().getDate());
+        newsDTO.setCategory(news.get().getCategory());
+        List<NewsPicture> newsPictureList = newsPictureService.findAllByNewsId(id);
+        newsDTO.setNewsPictures(newsPictureList);
+        return ResponseEntity.ok(newsDTO);
     }
 }

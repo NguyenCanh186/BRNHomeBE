@@ -1,7 +1,7 @@
-package com.example.blogbe.service.storyService;
+package com.example.blogbe.service.newsService;
 
-import com.example.blogbe.model.story.Story;
-import com.example.blogbe.repo.IStoryRepo;
+import com.example.blogbe.model.news.News;
+import com.example.blogbe.repo.INewsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,22 +9,22 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class StoryService implements IStoryService{
+public class NewsService implements INewsService {
     @Autowired
-    private IStoryRepo storyRepo;
+    private INewsRepo storyRepo;
     @Override
-    public List<Story> findAll() {
+    public List<News> findAll() {
         return storyRepo.findAll();
     }
 
     @Override
-    public Optional<Story> findById(Long id) {
+    public Optional<News> findById(Long id) {
         return storyRepo.findById(id);
     }
 
     @Override
-    public Story save(Story story) {
-        return storyRepo.save(story);
+    public News save(News news) {
+        return storyRepo.save(news);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class StoryService implements IStoryService{
         storyRepo.deleteById(id);
     }
 
-    public Story findByName(String name) {
+    public News findByName(String name) {
         return storyRepo.findByName(name);
     }
 }
