@@ -1,5 +1,6 @@
 package com.example.blogbe.controller;
 
+import com.example.blogbe.config.custom.S3Util;
 import com.example.blogbe.model.story.Story;
 import com.example.blogbe.model.story.StoryReq;
 import com.example.blogbe.model.story.picture.StoryPicture;
@@ -15,6 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 @Controller
@@ -87,13 +91,8 @@ public class StoryController {
         Story storyCheck = storyService.findByName(storyReq.getName());
         if (storyCheck != null) {
             StoryPicture storyPicture = new StoryPicture();
-            MultipartFile multipartFile = storyReq.getImage();
-            String fileName = multipartFile.getOriginalFilename();
-            try {
-                FileCopyUtils.copy(storyReq.getImage().getBytes(), new File(this.fileUpload + fileName));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            String fileName = storyReq.getImage().getOriginalFilename();
+            S3Util.uploadFile(fileName, storyReq.getImage().getInputStream());
             storyPicture.setTitle(storyReq.getTitleImage());
             storyPicture.setImage(fileName);
             storyPicture.setStory(storyCheck);
@@ -105,13 +104,8 @@ public class StoryController {
             storyService.save(story);
             Story storyCallBack = storyService.findByName(storyReq.getName());
             StoryPicture storyPicture = new StoryPicture();
-            MultipartFile multipartFile = storyReq.getImage();
-            String fileName = multipartFile.getOriginalFilename();
-            try {
-                FileCopyUtils.copy(storyReq.getImage().getBytes(), new File(this.fileUpload + fileName));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            String fileName = storyReq.getImage().getOriginalFilename();
+            S3Util.uploadFile(fileName, storyReq.getImage().getInputStream());
             storyPicture.setTitle(storyReq.getTitleImage());
             storyPicture.setImage(fileName);
             storyPicture.setStory(storyCallBack);
