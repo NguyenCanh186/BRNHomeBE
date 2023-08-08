@@ -1,5 +1,6 @@
 package com.example.blogbe.controller;
 
+import com.example.blogbe.config.custom.S3Util;
 import com.example.blogbe.model.blog.Blog;
 import com.example.blogbe.model.blog.BlogForm;
 import com.example.blogbe.repo.BlogRepo;
@@ -22,11 +23,8 @@ public class BlogController {
     @Autowired
     private BlogRepo blogRepo;
 
-    @Value("${upload.path}")
-    private String fileUpload;
-
     @PostMapping
-    public ResponseEntity<?> createBlog(@ModelAttribute BlogForm blogForm){
+    public ResponseEntity<?> createBlog(@ModelAttribute BlogForm blogForm) throws IOException {
         List<Blog> blogs = blogRepo.findAll();
         for (Blog blog : blogs) {
             if (blog.getTitle().equals(blogForm.getTitle())) {
@@ -34,13 +32,8 @@ public class BlogController {
             }
         }
         Blog blog = new Blog();
-        MultipartFile multipartFile = blogForm.getFileImage();
-        String fileName = multipartFile.getOriginalFilename();
-        try {
-            FileCopyUtils.copy(blogForm.getFileImage().getBytes(), new File(this.fileUpload + fileName));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        String fileName = blogForm.getFileImage().getOriginalFilename();
+        S3Util.uploadFile(fileName, blogForm.getFileImage().getInputStream());
         blog.setTitle(blogForm.getTitle());
         blog.setContent(blogForm.getContent());
         blog.setImage(fileName);
@@ -49,15 +42,11 @@ public class BlogController {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> updateBlog(@ModelAttribute BlogForm blogForm){
+    public ResponseEntity<?> updateBlog(@ModelAttribute BlogForm blogForm) throws IOException {
         Blog blog = blogRepo.findById(blogForm.getId()).get();
         if (blogForm.getFileImage() != null) {
             String fileName = blogForm.getFileImage().getOriginalFilename();
-            try {
-                FileCopyUtils.copy(blogForm.getFileImage().getBytes(), new File(this.fileUpload + fileName));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            S3Util.uploadFile(fileName, blogForm.getFileImage().getInputStream());
             blog.setImage(fileName);
             blog.setTitle(blogForm.getTitle());
             blog.setContent(blogForm.getContent());

@@ -1,5 +1,6 @@
 package com.example.blogbe.controller;
 
+import com.example.blogbe.config.custom.S3Util;
 import com.example.blogbe.model.home.Home;
 import com.example.blogbe.model.home.HomeForm;
 import com.example.blogbe.service.home.IHomeService;
@@ -23,35 +24,23 @@ public class HomeController {
     @Autowired
     private IHomeService homeService;
 
-    @Value("${upload.path}")
-    private String fileUpload;
-
     @PostMapping
-    private ResponseEntity<?> creditHome(@ModelAttribute HomeForm homeForm) {
+    private ResponseEntity<?> creditHome(@ModelAttribute HomeForm homeForm) throws IOException {
         Home home = new Home(homeForm.getTitle(), homeForm.getDescription());
-        MultipartFile multipartFile = homeForm.getImage();
-        String fileName = multipartFile.getOriginalFilename();
-        try {
-            FileCopyUtils.copy(homeForm.getImage().getBytes(), new File(this.fileUpload + fileName));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        String fileName = homeForm.getImage().getOriginalFilename();
+        S3Util.uploadFile(fileName, homeForm.getImage().getInputStream());
         home.setImage(fileName);
         homeService.save(home);
         return ResponseEntity.ok(home);
     }
 
     @PostMapping("/update")
-    private ResponseEntity<?> updateHome(@ModelAttribute HomeForm homeForm) {
+    private ResponseEntity<?> updateHome(@ModelAttribute HomeForm homeForm) throws IOException {
         Home home = homeService.findAll().get(0);
         MultipartFile multipartFile = homeForm.getImage();
         if (multipartFile != null) {
-            String fileName = multipartFile.getOriginalFilename();
-            try {
-                FileCopyUtils.copy(homeForm.getImage().getBytes(), new File(this.fileUpload + fileName));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            String fileName = homeForm.getImage().getOriginalFilename();
+            S3Util.uploadFile(fileName, homeForm.getImage().getInputStream());
             home.setImage(fileName);
             home.setTitle(homeForm.getTitle());
             home.setDescription(homeForm.getDescription());

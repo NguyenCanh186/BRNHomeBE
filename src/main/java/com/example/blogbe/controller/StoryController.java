@@ -30,9 +30,6 @@ public class StoryController {
 
     @Autowired
     private StoryPictureService storyPictureService;
-
-    @Value("${upload.path}")
-    private String fileUpload;
     
     @PostMapping("/update")
     private ResponseEntity<?> update(@ModelAttribute StoryReq storyReq) throws IOException {
@@ -54,13 +51,8 @@ public class StoryController {
         if (storyReq.getPictureId() != null) {
             Optional<StoryPicture> storyPicture1 = storyPictureService.findById(storyReq.getPictureId());
             if (storyReq.getImage() != null) {
-                MultipartFile multipartFile = storyReq.getImage();
-                String fileName = multipartFile.getOriginalFilename();
-                try {
-                    FileCopyUtils.copy(storyReq.getImage().getBytes(), new File(this.fileUpload + fileName));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                String fileName = storyReq.getImage().getOriginalFilename();
+                S3Util.uploadFile(fileName, storyReq.getImage().getInputStream());
                 storyPicture1.get().setTitle(storyReq.getTitleImage());
                 storyPicture1.get().setImage(fileName);
                 storyPicture1.get().setStory(story.get());
@@ -71,13 +63,8 @@ public class StoryController {
                 storyPictureService.save(storyPicture1.get());
             }
         } else {
-            MultipartFile multipartFile = storyReq.getImage();
-            String fileName = multipartFile.getOriginalFilename();
-            try {
-                FileCopyUtils.copy(storyReq.getImage().getBytes(), new File(this.fileUpload + fileName));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            String fileName = storyReq.getImage().getOriginalFilename();
+            S3Util.uploadFile(fileName, storyReq.getImage().getInputStream());
             storyPicture.setTitle(storyReq.getTitleImage());
             storyPicture.setImage(fileName);
             storyPicture.setStory(story.get());
