@@ -20,9 +20,9 @@ public class News {
 
     private String title;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "news")
-    private List<NewsPicture> newsPictures;
+    @Column(columnDefinition = "TEXT")
+    private String content;
+    private String description;
 
     private Date date;
 

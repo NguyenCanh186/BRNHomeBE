@@ -12,16 +12,11 @@ public class NewsReq {
 
     private String title;
 
-    private Long pictureId;
+    private String content;
 
-    private MultipartFile image;
-    private String titleImage;
+    private String description;
 
     private int category;
-
-    private String isDeletePicture;
-
-    private String listIdPicture;
     public NewsReq() {
     }
 
