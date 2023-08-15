@@ -2,7 +2,6 @@ package com.example.blogbe.controller;
 
 import com.example.blogbe.model.news.News;
 import com.example.blogbe.model.news.NewsReq;
-import com.example.blogbe.model.news.picture.NewsPicture;
 import com.example.blogbe.service.newsService.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -56,7 +55,7 @@ public class NewsController {
     
     @PostMapping("/update")
     private ResponseEntity<?> update(@ModelAttribute NewsReq NewsReq) throws IOException {
-        News news = new News();
+        News news = newsService.findById(NewsReq.getId()).get();
         if (NewsReq.getCover() != null) {
             MultipartFile multipartFile = NewsReq.getCover();
             String fileName = multipartFile.getOriginalFilename();
@@ -67,9 +66,9 @@ public class NewsController {
             }
             news.setCover(fileName);
         }
-        news.setId(NewsReq.getId());
         news.setTitle(NewsReq.getTitle());
         news.setContent(NewsReq.getContent());
+        news.setDescription(NewsReq.getDescription());
         news.setCategory(NewsReq.getCategory());
         newsService.save(news);
         return ResponseEntity.ok("Xong");

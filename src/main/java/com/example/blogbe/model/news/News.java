@@ -1,12 +1,9 @@
 package com.example.blogbe.model.news;
 
-import com.example.blogbe.model.news.picture.NewsPicture;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Data
