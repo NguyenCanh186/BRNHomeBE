@@ -19,9 +19,8 @@ public class GetDataController {
     private NewsService newsService;
 
     @GetMapping("/news")
-    public ResponseEntity<List<News>> getNews() {
-        List<News> newsList = newsService.findAll();
-        return ResponseEntity.ok(newsList);
+    public ResponseEntity<?> getNews(@RequestParam Long page, @RequestParam Long size, @RequestParam(required = false) String title) {
+        return ResponseEntity.ok(newsService.findAllByTitleContaining(title, page - 1, size, "DESC"));
     }
 
     @GetMapping("/news/{id}")
