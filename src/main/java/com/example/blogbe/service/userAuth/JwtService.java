@@ -57,12 +57,4 @@ public class JwtService {
                 .getBody().getSubject();
         return userName;
     }
-
-//    public String getEmailFromJwtToken(String token) {
-//        String userEmail = Jwts.parser()
-//                .setSigningKey(SECRET_KEY)
-//                .parseClaimsJws(token)
-//                .getBody().getSubject();
-//        return userEmail;
-//    }
 }
