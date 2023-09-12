@@ -18,7 +18,7 @@ public class NewsService implements INewsService {
     private INewsRepo storyRepo;
     @Override
     public List<News> findAll() {
-        return storyRepo.findAll();
+        return storyRepo.findAllDESC();
     }
 
     @Override

@@ -19,6 +19,10 @@ public class GetDataController {
     private NewsService newsService;
 
     @GetMapping("/news")
+    public ResponseEntity<?> getNewsCustomer() {
+        return ResponseEntity.ok(newsService.findAll());
+    }
+    @GetMapping("/newsCustomer")
     public ResponseEntity<?> getNews(@RequestParam Long page, @RequestParam Long size, @RequestParam(required = false) String title) {
         return ResponseEntity.ok(newsService.findAllByTitleContaining(title, page - 1, size, "DESC"));
     }

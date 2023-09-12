@@ -8,8 +8,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface INewsRepo extends JpaRepository<News, Long> {
+
+    @Query(nativeQuery = true, value = "SELECT * FROM news ORDER BY id DESC")
+    List<News> findAllDESC();
     @Query(nativeQuery = true, value = "select * FROM news where title = ?;")
     News findByName(String name);
 
