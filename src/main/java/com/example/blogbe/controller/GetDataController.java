@@ -35,4 +35,9 @@ public class GetDataController {
         }
         return ResponseEntity.ok(news);
     }
+    @PostMapping("/sendMail")
+    public ResponseEntity<?> sendMail() {
+        SendEmail.send();
+        return ResponseEntity.ok("Xong");
+    }
 }
