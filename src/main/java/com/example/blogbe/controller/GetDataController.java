@@ -1,5 +1,6 @@
 package com.example.blogbe.controller;
 
+import com.example.blogbe.model.Mailer;
 import com.example.blogbe.model.news.News;
 import com.example.blogbe.service.newsService.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,8 @@ public class GetDataController {
         return ResponseEntity.ok(news);
     }
     @PostMapping("/sendMail")
-    public ResponseEntity<?> sendMail() {
-        SendEmail.send();
+    public ResponseEntity<?> sendMail(@RequestBody Mailer mailer) {
+        SendEmail.send(mailer);
         return ResponseEntity.ok("Xong");
     }
 }
