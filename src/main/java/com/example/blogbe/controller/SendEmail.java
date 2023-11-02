@@ -8,8 +8,8 @@ import javax.mail.internet.*;
 
 public class SendEmail {
     public static void send(Mailer mailer) {
-        String from = "leagueyasuo186@gmail.com";
-        String password = "bnqx lkha xelz gjpm";
+        String from = "brandnameregistervmg@gmail.com";
+        String password = "zssl stie wsks ypir";
         String to = "canh.nguyen3306@gmail.com";
         String host = "smtp.gmail.com";
         String port = "587";
